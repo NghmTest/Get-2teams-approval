@@ -58,6 +58,3 @@ jobs:
         run: |
           approved_users=$(echo "${{ steps.pr_reviews.outputs.reviews }}" | jq -r '.[] | select(.state == "APPROVED") | .user.login')
           echo "::set-output name=approved_users::$approved_users"
-
-      - name: Print Approved Users
-        run: echo "Approved Users: ${{ steps.approved_users.outputs.approved_users }}"     
