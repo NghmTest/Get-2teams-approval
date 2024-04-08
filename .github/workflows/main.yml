@@ -56,5 +56,4 @@ jobs:
       - name: Extract Approved Users
         id: approved_users
         run: |
-          approved_users=$(echo "${{ steps.pr_reviews.outputs.reviews }}" | jq -r '.[] | select(.state == "APPROVED") | .user.login')
-          echo "::set-output name=approved_users::$approved_users"
+          echo "${{ steps.pr_reviews.outputs.reviews }}"
