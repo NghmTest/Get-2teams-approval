@@ -7,7 +7,8 @@ on:
 
 env:
   ORG_NAME: ${{ secrets.ORG_NAME }}
-  TEAM_SLUG: ${{ secrets.TEAM_SLUG1 }}
+  TEAM_SLUG1: ${{ secrets.TEAM_SLUG1 }}
+  TEAM_SLUG2: ${{ secrets.TEAM_SLUG2 }}
   TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
@@ -16,13 +17,47 @@ jobs:
 
     steps:
         
-      - name: Get team members
+      - name: Get team1 members
         run: |
           members=$(curl -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $TOKEN" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/orgs/$ORG_NAME/teams/$TEAM_SLUG/members)
+            https://api.github.com/orgs/$ORG_NAME/teams/$TEAM_SLUG1/members)
           echo "::set-output name=members::$(echo $members | jq -r '.[].login')"
 
-      # Add more steps as needed for further processing
+      - name: Get team2 members
+        run: |
+          members=$(curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/orgs/$ORG_NAME/teams/$TEAM_SLUG2/members)
+          echo "::set-output name=members::$(echo $members | jq -r '.[].login')"
+
+      - name: Get reviwers of a PR
+        run: |
+          reviwers=$(curl -L \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $TOKEN" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews)   
+
+      - name: Get PR Reviews
+        id: pr_reviews
+        run: |
+          reviews=$(curl -sSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$ORG_NAME/Get-2teams-approval/pulls/1/reviews)
+          echo "::set-output name=reviews::$reviews"     
+
+      - name: Extract Approved Users
+        id: approved_users
+        run: |
+          approved_users=$(echo "${{ steps.pr_reviews.outputs.reviews }}" | jq -r '.[] | select(.state == "APPROVED") | .user.login')
+          echo "::set-output name=approved_users::$approved_users"
+
+      - name: Print Approved Users
+        run: echo "Approved Users: ${{ steps.approved_users.outputs.approved_users }}"    
