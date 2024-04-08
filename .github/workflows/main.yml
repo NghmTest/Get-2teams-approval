@@ -14,8 +14,6 @@ env:
 jobs:
   merge_on_approval:
     runs-on: ubuntu-latest
-    outputs:
-      urls: ${{ steps.pr_reviews.outputs.reviews }}
 
     steps:
         
@@ -54,4 +52,6 @@ jobs:
         id: approved_users
         run: |
           echo "$(echo $reviews | jq -r '.[] | .user.login' )"
+          echo "$(echo $reviews | jq -r '.[] | .state' )"
+          echo "$(echo $reviews | jq -r '.[] | select(.state == APPROVED) | helloImHEre' )"
 
