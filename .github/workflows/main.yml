@@ -7,17 +7,17 @@ on:
 
 env:
   ORG_NAME: ${{ secrets.ORG_NAME }}
-  teams:
-    - TEAM_SLUG1: ${{ secrets.TEAM_SLUG1 }}
-    - TEAM_SLUG2: ${{ secrets.TEAM_SLUG2 }}
   TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
   merge_on_approval:
     runs-on: ubuntu-latest
-
-    steps:
-        
+    strategy:
+      max-parallel: 5
+      matrix:
+        teams: [${{ secrets.TEAM_SLUG1 }}, ${{ secrets.TEAM_SLUG2 }}]
+    
+    steps: 
       - name: Get members
         run: |
           all_members=""
@@ -26,7 +26,7 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer $TOKEN" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              https://api.github.com/orgs/$ORG_NAME/teams/$TEAM_SLUG1/members)
+              https://api.github.com/orgs/$ORG_NAME/teams/${{ matrix.teams }}/members)
             echo "::set-output name=members::$(echo $members | jq -r '.[].login')"
             all_members="$all_members $members"
           done
