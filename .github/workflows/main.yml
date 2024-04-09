@@ -11,11 +11,11 @@ env:
 
 jobs:
   merge_on_approval:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         teams: [${{ secrets.TEAM_SLUG1 }}, ${{ secrets.TEAM_SLUG2 }}]
     
+    runs-on: ubuntu-latest
     steps: 
       - name: Get members
         run: |
