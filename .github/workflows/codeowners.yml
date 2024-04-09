@@ -1,0 +1,16 @@
+name: Get the Teams
+
+on:
+  workflow_dispatch:
+  pull_request_review:
+    types: [submitted]
+
+
+jobs:
+  get_teams:
+    runs-on: ubuntu-latest
+    steps: 
+      - id: codeowners
+        uses: SvanBoxel/codeowners-action@v1
+      - run: |
+          echo ${{ steps.codeowners.outputs.codeowners }}
