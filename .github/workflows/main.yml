@@ -20,6 +20,9 @@ jobs:
     steps: 
       - name: Get members
         run: |
+          echo "============="
+          echo "${{ matrix.teams }}"
+          echo "==============="
           all_members=""
           for team_slug in "${{ matrix.teams }}"; do
             members=$(curl -L \
