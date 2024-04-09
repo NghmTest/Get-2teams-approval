@@ -8,7 +8,7 @@ on:
 env:
   ORG_NAME: ${{ secrets.ORG_NAME }}
   TOKEN: ${{ secrets.TOKEN }}
-  TEAMS: ${{ variables.TEAMS }}
+  TEAMS: ${{ github.TEAMS }}
 
 jobs:
   merge_on_approval:
