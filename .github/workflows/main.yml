@@ -8,14 +8,13 @@ on:
 env:
   ORG_NAME: ${{ secrets.ORG_NAME }}
   TOKEN: ${{ secrets.TOKEN }}
+  TEAMS: ${{ secrets.TEAMS }}
 
 jobs:
   merge_on_approval:
     strategy:
       matrix:
-        teams: 
-          - ${{ secrets.TEAM_SLUG1 }}
-          - ${{ secrets.TEAM_SLUG2 }}
+        teams: [$TEAMS]
     
     runs-on: ubuntu-latest
     steps: 
