@@ -15,7 +15,7 @@ jobs:
     steps: 
       - name: Get members
         run: |
-          echo "++++ ${{ secrets.TEAMS }} ++++"
+          echo "++++ $TEAMS ++++"
           # all_members=""
           # for team_slug in "${{ fromJson(secrets.TEAMS) }}"; do
           #   echo "======= $team_slug ======"
