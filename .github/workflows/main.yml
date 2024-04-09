@@ -13,7 +13,6 @@ jobs:
   merge_on_approval:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 5
       matrix:
         teams: [${{ secrets.TEAM_SLUG1 }}, ${{ secrets.TEAM_SLUG2 }}]
     
