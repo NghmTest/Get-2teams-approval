@@ -17,7 +17,7 @@ jobs:
       - name: Get members
         run: |
           all_members=""
-          for team_slug in "${{ fromJson(TEAMS) }}"; do
+          for team_slug in "${{ fromJson(env.TEAMS) }}"; do
             members=$(curl -L \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
