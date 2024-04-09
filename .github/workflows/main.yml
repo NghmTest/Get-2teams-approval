@@ -15,8 +15,18 @@ jobs:
     steps: 
       - name: Get members
         run: |
-          echo "------ ${{ fromJson(secrets.TEAMS) }} --- "
-          
+          all_members=""
+          for team_slug in "${{ fromJson(secrets.TEAMS) }}"; do
+            echo "======= $team_slug ======"
+            members=$(curl -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/orgs/$ORG_NAME/teams/$team_slug/members")
+            echo "::set-output name=members_$team_slug::$members"
+            all_members="$all_members $members"
+          done
+          echo "$all_members" >> members.txt
 
       - name: Get PR Reviews
         id: pr_reviews
