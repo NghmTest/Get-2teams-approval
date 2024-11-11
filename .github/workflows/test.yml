@@ -1,0 +1,15 @@
+# .github/workflows/display-time.yml
+name: Display Time on Push
+
+on: dispatch
+
+jobs:
+  display-time:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Display current time
+        run: |
+          echo "Current time is $(date)"
